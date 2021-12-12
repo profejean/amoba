@@ -17,3 +17,20 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('login', 'AuthController@login')->name('login'); 
+Route::post('register', 'AuthController@register'); 
+Route::get('current', 'AuthController@currentUser');
+
+
+
+Route::middleware('api')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::post('profile', 'UserController@profile');   
+    Route::get('search/{data}', 'UserController@search');  
+    Route::get('date/{dateStart}/{dateEnd}', 'UserController@date'); 
+    Route::get('validate/email/{email}','UserController@email');
+    Route::post('/logout', 'AuthController@logout');
+});
+
+

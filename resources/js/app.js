@@ -18,8 +18,14 @@ window.Vue = require('vue');
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+import axios from 'axios';
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+Vue.component('user-component', require('./components/UserComponent.vue').default);
+Vue.component('login-component', require('./components/LoginComponent.vue').default);
+
+Vue.prototype.$url=process.env.MIX_APP_URL;
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -28,5 +34,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app',
+    el: '#app',    
+    
 });
+
