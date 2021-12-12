@@ -78,7 +78,8 @@
                                 </div>                    
 
                                 <div class="flex flex-col flex-grow-0 justify-start items-center px-4"> 
-                                    <div>
+                                    <div>        
+                                        <h2 v-text="user.id"></h2>                                 
                                         <label for="first_name">Nombre</label>                                  
                                         <input type="text" name="first_name"  v-model="first_name" class="border">  
                                     </div>
@@ -105,9 +106,10 @@
                                 <div class="flex flex-grow-0 justify-center items-center px-4">
                                 <img v-bind:src="'img/'+user.ima_profile" alt="" class="rounded-full w-10 h-10">
                                 </div>
-                                <div class="flex flex-col flex-grow-0 justify-start items-center px-4">                    
-                                    <h4 class="font-bold text-lg">{{ user.first_name }} {{ user.last_name }}</h4>
-                                    <button class="text-orange-600 text-sm" v-on:click="onClickDelete(index,user.id)">Eliminar</button>
+                                <div class="flex flex-col flex-grow-0 justify-start items-center px-4">   
+                                    <h2 v-text="user.id"></h2>                
+                                    <h4 class="font-bold text-lg" >{{ user.first_name }} {{ user.last_name }}</h4>
+                                    <button class="text-orange-600 text-sm" v-on:click="onClickDelete(user.id)">Eliminar</button>
                                 </div>
                                 <div class="flex flex-auto  justify-start items-center px-4 col-span-5 text-justify">                
                                     <p class="text-lg" v-text="user.description">
@@ -360,7 +362,7 @@
             alertDelete: false,
             editActive: false,
             userActive:'',
-            validateEmail:false
+            validateEmail:0
               
               
         
@@ -375,12 +377,13 @@
            
         
         methods: {   
-                      
-            getUsers(){
-                axios.get(this.$url + '/api/users/')
-                     .then((response)=>{ 
-                       this.users = response.data
-                     })
+                     
+            getUsers(){            
+     
+                axios.get(this.$url + '/api/users').then(response => {
+
+                    this.users = response.data
+                }) 
             },
             getUserActive(){                
                 this.userActive = localStorage.getItem("userActive") + ' Salir'                   
@@ -408,21 +411,13 @@
 
                 if (!this.errors.length) {    
                     this.validateEma(this.user.email)
-               
-                    if(this.validateEmail) {
+                    
+                    console.log(this.validateEmail)
+                    if(this.validateEmail == 0) {
                  
                         axios.post(this.$url + '/api/users', this.user)
                         .then((res) => {         
-                            this.users.push(
-                            {
-                            first_name: this.user.first_name,
-                            last_name: this.user.last_name,
-                            description: this.user.description,
-                            email: this.user.email,
-                            password: this.user.password,
-                            ima_profile:'user.png'
-                            })                      
-                            
+                            this.getUsers()                      
                             this.chargeImage()
                         })
                         .catch((error) => {
@@ -457,7 +452,7 @@
                 })
            
             },
-            updateUser(id,index) { 
+            updateUser(id) { 
                 this.user.first_name = this.first_name;
                 this.user.description = this.description;
                 this.user.last_name = this.last_name;
@@ -471,11 +466,11 @@
                    
                 }); 
             },
-            onClickDelete(index,id) { 
-                
+            onClickDelete(id) {  
+            
                 axios.delete(this.$url + '/api/users/'+id)
-                    .then((res) => {
-                    this.editActive = user.id.pop(index)
+                    .then((res) => {                                
+                     this.getUsers() 
                      this.alertDelete = true
                 });     
                            
@@ -518,11 +513,10 @@
                 localStorage.removeItem('token')
                 window.location.replace(this.$url + "/viewLogin")    
             },
-            validateEma(email) {
+            validateEma(email) {   
              axios.get(this.$url + '/api/validate/email/'+email)
-                .then((response)=>{ 
-                   
-                    this.validateEmail = response.data
+                .then((response)=>{                
+                    this.validateEmail = response.data               
                 })
 
             }
@@ -530,7 +524,7 @@
          
            
         },
-        created() {
+        created() { 
             const access = axios.defaults.headers.common["authorization"] = localStorage.getItem("token")
             if(access)
             {

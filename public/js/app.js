@@ -1970,7 +1970,8 @@ __webpack_require__.r(__webpack_exports__);
       this.user.password = this.password;
       axios.post(this.$url + '/api/login', this.user).then(function (res) {
         if (res.data) {
-          localStorage.setItem("token", res.data[0]);
+          console.log(res.data);
+          localStorage.setItem("token", res.data[0].access_token);
           localStorage.setItem("userActive", res.data[1]);
           window.location.replace(_this.$url + "/home");
         }
@@ -1993,6 +1994,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_paginate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-paginate */ "./node_modules/vue-paginate/dist/vue-paginate.js");
 /* harmony import */ var vue_paginate__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_paginate__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
 //
 //
 //
@@ -2348,7 +2351,7 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
       alertDelete: false,
       editActive: false,
       userActive: '',
-      validateEmail: false
+      validateEmail: 0
     };
   },
   props: {},
@@ -2356,7 +2359,7 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
     getUsers: function getUsers() {
       var _this = this;
 
-      axios.get(this.$url + '/api/users/').then(function (response) {
+      axios.get(this.$url + '/api/users').then(function (response) {
         _this.users = response.data;
       });
     },
@@ -2390,17 +2393,11 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
 
       if (!this.errors.length) {
         this.validateEma(this.user.email);
+        console.log(this.validateEmail);
 
-        if (this.validateEmail) {
+        if (this.validateEmail == 0) {
           axios.post(this.$url + '/api/users', this.user).then(function (res) {
-            _this2.users.push({
-              first_name: _this2.user.first_name,
-              last_name: _this2.user.last_name,
-              description: _this2.user.description,
-              email: _this2.user.email,
-              password: _this2.user.password,
-              ima_profile: 'user.png'
-            });
+            _this2.getUsers();
 
             _this2.chargeImage();
           })["catch"](function (error) {})["finally"](function () {});
@@ -2423,7 +2420,7 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
         _this3.alertSuccess = true;
       });
     },
-    updateUser: function updateUser(id, index) {
+    updateUser: function updateUser(id) {
       var _this4 = this;
 
       this.user.first_name = this.first_name;
@@ -2435,11 +2432,12 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
         _this4.editActive = false;
       });
     },
-    onClickDelete: function onClickDelete(index, id) {
+    onClickDelete: function onClickDelete(id) {
       var _this5 = this;
 
       axios["delete"](this.$url + '/api/users/' + id).then(function (res) {
-        _this5.editActive = user.id.pop(index);
+        _this5.getUsers();
+
         _this5.alertDelete = true;
       });
     },
@@ -21348,6 +21346,12 @@ var render = function () {
                                       },
                                       [
                                         _c("div", [
+                                          _c("h2", {
+                                            domProps: {
+                                              textContent: _vm._s(user.id),
+                                            },
+                                          }),
+                                          _vm._v(" "),
                                           _c(
                                             "label",
                                             { attrs: { for: "first_name" } },
@@ -21513,6 +21517,12 @@ var render = function () {
                                           "flex flex-col flex-grow-0 justify-start items-center px-4",
                                       },
                                       [
+                                        _c("h2", {
+                                          domProps: {
+                                            textContent: _vm._s(user.id),
+                                          },
+                                        }),
+                                        _vm._v(" "),
                                         _c(
                                           "h4",
                                           { staticClass: "font-bold text-lg" },
@@ -21533,7 +21543,6 @@ var render = function () {
                                             on: {
                                               click: function ($event) {
                                                 return _vm.onClickDelete(
-                                                  index,
                                                   user.id
                                                 )
                                               },
@@ -35067,13 +35076,9 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -35091,7 +35096,6 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  */
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
 
 Vue.component('user-component', __webpack_require__(/*! ./components/UserComponent.vue */ "./resources/js/components/UserComponent.vue")["default"]);
 Vue.component('login-component', __webpack_require__(/*! ./components/LoginComponent.vue */ "./resources/js/components/LoginComponent.vue")["default"]);
@@ -35129,7 +35133,12 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
  */
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/*const access_token = localStorage.getItem("token");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.withCredentials = true;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;*/
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

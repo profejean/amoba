@@ -63,8 +63,8 @@ class UserController extends Controller
 
     public function email($email)
     { 
-        $count = User::where('email','=',$email)->count();     
-        return response()->json($count);
+        $count = User::where('email','=',$email)->count();         
+        return $count;
     }
 
     public function profile(Request $request) {

@@ -66,10 +66,10 @@
                 axios.post(this.$url + '/api/login', this.user)
                  .then((res) => {                  
                    if(res.data)
-                   {
-                  
-                       localStorage.setItem(
-                           "token",res.data[0]
+                   {  console.log(res.data)
+                      
+                       localStorage.setItem( 
+                           "token",res.data[0].access_token
                        )
                        localStorage.setItem(
                            "userActive",res.data[1]

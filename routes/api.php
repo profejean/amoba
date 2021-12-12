@@ -19,12 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('login', 'AuthController@login')->name('login'); 
-Route::post('register', 'AuthController@register'); 
-Route::get('current', 'AuthController@currentUser');
 
-
-
-Route::middleware('api')->group(function () {
+Route::middleware('api',/*'auth:api'*/)->group(function () {
     Route::resource('users', UserController::class);
     Route::post('profile', 'UserController@profile');   
     Route::get('search/{data}', 'UserController@search');  

@@ -13,7 +13,7 @@ class ProfileSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=1; $i < 20; $i++) {            
+        for ($i=1; $i < 21; $i++) {            
             Profile::create([
                 'user_id'            => $i,
                 'ima_profile'            => 'user.png',                 
