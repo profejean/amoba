@@ -18,7 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', 'AuthController@login')->name('login');   
+Route::post('login', 'AuthController@login')->name('login');  
+
 
 Route::middleware('api','auth:api','web')->group(function () {
     Route::resource('users', UserController::class);
@@ -27,6 +28,7 @@ Route::middleware('api','auth:api','web')->group(function () {
     Route::get('date/{dateStart}/{dateEnd}', 'UserController@date'); 
     Route::get('validate/email/{email}','UserController@email');
     Route::post('/logout', 'AuthController@logout');
+   
 });
 
 

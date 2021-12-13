@@ -2393,7 +2393,6 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
 
       if (!this.errors.length) {
         this.validateEma(this.user.email);
-        console.log(this.validateEmail);
 
         if (this.validateEmail == 0) {
           axios.post(this.$url + '/api/users', this.user).then(function (res) {
@@ -2487,8 +2486,9 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
   },
   created: function created() {
     var access = axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem("token");
+    var control = localStorage.getItem("token");
 
-    if (access) {
+    if (control) {
       this.getUsers();
       this.viewActive();
       this.getUserActive();

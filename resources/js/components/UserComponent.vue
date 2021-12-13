@@ -527,13 +527,15 @@
            
         },
         created() { 
-            const access = axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem("token")
-            if(access)
+            
+            const access = axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem("token")  
+            const control = localStorage.getItem("token")  
+         
+            if(control)
             {
                 this.getUsers()
                 this.viewActive()
-                this.getUserActive()           
-                
+                this.getUserActive()         
             }
             else
             {
