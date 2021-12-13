@@ -2486,7 +2486,7 @@ Vue.use(vue_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
     }
   },
   created: function created() {
-    var access = axios.defaults.headers.common["authorization"] = localStorage.getItem("token");
+    var access = axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem("token");
 
     if (access) {
       this.getUsers();
@@ -21346,12 +21346,6 @@ var render = function () {
                                       },
                                       [
                                         _c("div", [
-                                          _c("h2", {
-                                            domProps: {
-                                              textContent: _vm._s(user.id),
-                                            },
-                                          }),
-                                          _vm._v(" "),
                                           _c(
                                             "label",
                                             { attrs: { for: "first_name" } },
@@ -21517,12 +21511,6 @@ var render = function () {
                                           "flex flex-col flex-grow-0 justify-start items-center px-4",
                                       },
                                       [
-                                        _c("h2", {
-                                          domProps: {
-                                            textContent: _vm._s(user.id),
-                                          },
-                                        }),
-                                        _vm._v(" "),
                                         _c(
                                           "h4",
                                           { staticClass: "font-bold text-lg" },
@@ -35076,9 +35064,13 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -35100,6 +35092,8 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 Vue.component('user-component', __webpack_require__(/*! ./components/UserComponent.vue */ "./resources/js/components/UserComponent.vue")["default"]);
 Vue.component('login-component', __webpack_require__(/*! ./components/LoginComponent.vue */ "./resources/js/components/LoginComponent.vue")["default"]);
 Vue.prototype.$url = "http://localhost/amoba/public";
+
+Vue.use(axios__WEBPACK_IMPORTED_MODULE_0___default.a);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -35133,12 +35127,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
  */
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/*const access_token = localStorage.getItem("token");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.withCredentials = true;
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;*/
-
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

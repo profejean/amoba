@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {        
-      
+   
         $users = User::join('profile', 'users.id', '=', 'profile.user_id')->get();
         
         return response()->json($users);

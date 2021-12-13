@@ -25,6 +25,11 @@ Vue.component('user-component', require('./components/UserComponent.vue').defaul
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
 
 Vue.prototype.$url=process.env.MIX_APP_URL;
+
+import Axios from "axios";
+Vue.use(Axios)
+
+
  
 
 /**

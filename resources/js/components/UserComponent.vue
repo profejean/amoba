@@ -79,7 +79,7 @@
 
                                 <div class="flex flex-col flex-grow-0 justify-start items-center px-4"> 
                                     <div>        
-                                        <h2 v-text="user.id"></h2>                                 
+                                                                       
                                         <label for="first_name">Nombre</label>                                  
                                         <input type="text" name="first_name"  v-model="first_name" class="border">  
                                     </div>
@@ -107,7 +107,7 @@
                                 <img v-bind:src="'img/'+user.ima_profile" alt="" class="rounded-full w-10 h-10">
                                 </div>
                                 <div class="flex flex-col flex-grow-0 justify-start items-center px-4">   
-                                    <h2 v-text="user.id"></h2>                
+                                                  
                                     <h4 class="font-bold text-lg" >{{ user.first_name }} {{ user.last_name }}</h4>
                                     <button class="text-orange-600 text-sm" v-on:click="onClickDelete(user.id)">Eliminar</button>
                                 </div>
@@ -329,9 +329,10 @@
 
 <script>
    
-    
+   
     import VuePaginate from 'vue-paginate'
     Vue.use(VuePaginate)
+    
 
     
 
@@ -378,7 +379,8 @@
         
         methods: {   
                      
-            getUsers(){            
+            getUsers(){       
+                    
      
                 axios.get(this.$url + '/api/users').then(response => {
 
@@ -412,7 +414,7 @@
                 if (!this.errors.length) {    
                     this.validateEma(this.user.email)
                     
-                    console.log(this.validateEmail)
+                 
                     if(this.validateEmail == 0) {
                  
                         axios.post(this.$url + '/api/users', this.user)
@@ -525,7 +527,7 @@
            
         },
         created() { 
-            const access = axios.defaults.headers.common["authorization"] = localStorage.getItem("token")
+            const access = axios.defaults.headers.common["Authorization"] = 'Bearer ' + localStorage.getItem("token")
             if(access)
             {
                 this.getUsers()
