@@ -97,6 +97,7 @@ class UserController extends Controller
     {
         $users = User::findOrFail($id);
         $users->first_name = $request->get('first_name');
+        $users->last_name = $request->get('last_name');
         $users->description = $request->get('description');
         $users->save();
 
