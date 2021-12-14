@@ -11,17 +11,23 @@
                         d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                 </svg>
             </div>
-            <h3 class="text-2xl font-bold text-center">Login to your account</h3>
+            <h3 class="text-2xl font-bold text-center">Iniciar Sesión</h3>
+                <p v-if="errors.length">
+                    <b>Por favor, corrija el(los) siguiente(s) error(es):</b>
+                    <ul>
+                    <li class="text-red-600" v-for="error in errors"  v-bind:key="error.id">{{ error }}</li>
+                    </ul>
+                </p>
         
                 <div class="mt-4">
                     <div>
-                        <label class="block" for="email">Email</label>
+                        <label class="block" for="email">Correo</label>
                                 <input type="text" placeholder="Email"
                                     class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" name="email" v-model="email">
                                
                     </div>
                     <div class="mt-4">
-                        <label class="block">Password</label>
+                        <label class="block">Contraseña</label>
                                 <input type="password" placeholder="Password" v-model="password" name="password"
                                     class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
                     </div>
@@ -51,7 +57,8 @@
                 password:'',          
               },     
               email:'',
-              password:''
+              password:'',
+              errors: []
             }
         },
       
@@ -60,28 +67,49 @@
         },
         methods: {  
             send() {
-                this.user.username = this.email;
-                this.user.password = this.password;     
 
-                axios.post(this.$url + '/api/login', this.user)
-                 .then((res) => {                  
-                   if(res.data)
-                   {  console.log(res.data)
-                      
-                       localStorage.setItem( 
-                           "token",res.data[0].access_token
-                       )
-                       localStorage.setItem(
-                           "userActive",res.data[1]
-                       )
-                       window.location.replace(this.$url + "/home")
-                   }          
-                 })
-                 .catch((error) => {
-                     
-                 }).finally(() => {
+                this.errors = [];
+
+                if (!this.email) {
+                    this.errors.push('El email es obligatorio.');
+                }
+
+                if (!this.password) {
+                    this.errors.push('La contraseña es obligatoria.');
+                }
+
+                if (!this.errors.length) {  
+
+                    this.user.username = this.email;
+                    this.user.password = this.password;                 
                     
-                 })
+
+                    axios.post(this.$url + '/api/login', this.user)
+                    .then((res) => {                  
+                        if(res.data)
+                        { 
+                            if(res.data[0].access_token)   
+                            {                    
+                                localStorage.setItem( 
+                                    "token",res.data[0].access_token
+                                )
+                                localStorage.setItem(
+                                    "userActive",res.data[1]
+                                )
+                                window.location.replace(this.$url + "/home")
+                            }
+                            else{
+                                this.errors.push('Lo datos son incorrectos, por favor intentelo nuevamente.');
+                            }
+                        }          
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    }).finally(() => {
+                        
+                    })
+
+                }
             }
            
         },

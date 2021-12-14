@@ -1950,6 +1950,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1958,7 +1964,8 @@ __webpack_require__.r(__webpack_exports__);
         password: ''
       },
       email: '',
-      password: ''
+      password: '',
+      errors: []
     };
   },
   props: {},
@@ -1966,16 +1973,33 @@ __webpack_require__.r(__webpack_exports__);
     send: function send() {
       var _this = this;
 
-      this.user.username = this.email;
-      this.user.password = this.password;
-      axios.post(this.$url + '/api/login', this.user).then(function (res) {
-        if (res.data) {
-          console.log(res.data);
-          localStorage.setItem("token", res.data[0].access_token);
-          localStorage.setItem("userActive", res.data[1]);
-          window.location.replace(_this.$url + "/home");
-        }
-      })["catch"](function (error) {})["finally"](function () {});
+      this.errors = [];
+
+      if (!this.email) {
+        this.errors.push('El email es obligatorio.');
+      }
+
+      if (!this.password) {
+        this.errors.push('La contraseña es obligatoria.');
+      }
+
+      if (!this.errors.length) {
+        this.user.username = this.email;
+        this.user.password = this.password;
+        axios.post(this.$url + '/api/login', this.user).then(function (res) {
+          if (res.data) {
+            if (res.data[0].access_token) {
+              localStorage.setItem("token", res.data[0].access_token);
+              localStorage.setItem("userActive", res.data[1]);
+              window.location.replace(_this.$url + "/home");
+            } else {
+              _this.errors.push('Lo datos son incorrectos, por favor intentelo nuevamente.');
+            }
+          }
+        })["catch"](function (error) {
+          console.log(error);
+        })["finally"](function () {});
+      }
     }
   },
   created: function created() {}
@@ -20885,13 +20909,33 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("h3", { staticClass: "text-2xl font-bold text-center" }, [
-            _vm._v("Login to your account"),
+            _vm._v("Iniciar Sesión"),
           ]),
+          _vm._v(" "),
+          _vm.errors.length
+            ? _c("p", [
+                _c("b", [
+                  _vm._v("Por favor, corrija el(los) siguiente(s) error(es):"),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  _vm._l(_vm.errors, function (error) {
+                    return _c(
+                      "li",
+                      { key: error.id, staticClass: "text-red-600" },
+                      [_vm._v(_vm._s(error))]
+                    )
+                  }),
+                  0
+                ),
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "mt-4" }, [
             _c("div", [
               _c("label", { staticClass: "block", attrs: { for: "email" } }, [
-                _vm._v("Email"),
+                _vm._v("Correo"),
               ]),
               _vm._v(" "),
               _c("input", {
@@ -20919,7 +20963,7 @@ var render = function () {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "mt-4" }, [
-              _c("label", { staticClass: "block" }, [_vm._v("Password")]),
+              _c("label", { staticClass: "block" }, [_vm._v("Contraseña")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -35093,7 +35137,6 @@ Vue.component('user-component', __webpack_require__(/*! ./components/UserCompone
 Vue.component('login-component', __webpack_require__(/*! ./components/LoginComponent.vue */ "./resources/js/components/LoginComponent.vue")["default"]);
 Vue.prototype.$url = "http://localhost/amoba/public";
 
-Vue.use(axios__WEBPACK_IMPORTED_MODULE_0___default.a);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
